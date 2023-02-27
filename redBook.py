@@ -22,7 +22,7 @@ def fetchUrl(url):
     '''
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 ',
-        'cookie':'xhsTrackerId=7ff0cee2-d318-4845-a5f1-7f4fb9acb9c3; xhsTrackerId.sig=hrWK6Hw0SUZ8mRCiVj0KO1K4nyb5Rbr3cxcAneVDyJY; xhsTracker=url=question&searchengine=google; xhsTracker.sig=G0hmoAbYkliJ6rkPr3m0vNvVCs2Hv97Ab2mTTr7U8iw; extra_exp_ids=h5_2302011_origin,h5_1208_exp3,h5_1130_exp1,ios_wx_launch_open_app_exp,h5_video_ui_exp3,wx_launch_open_app_duration_origin; extra_exp_ids.sig=dX246lgg_c1kwkgYAsYfV-n1is5wO3vWwU5eK_eJctE; webBuild=1.1.17; xsecappid=xhs-pc-web; a1=186823c9460khhoyfzypkmiw8cprofje475xhyso150000115335; webId=bbb653427b6f8ad0d223ff07d448275f; gid=yYKYJqSjjJ4dyYKYJqSj4WvMK8TxxlviuvUT2ly63EYSUC28FliVdx888yy2qq28j0DDy2dS; gid.sign=SVNqT90rFZJP8Hpu1fDr6lxAv7Q=; web_session=030037a4cb351b0516ff232780244a0727192f; websectiga=9730ffafd96f2d09dc024760e253af6ab1feb0002827740b95a255ddf6847fc8; sec_poison_id=401f1d2b-add3-4d6c-a82a-5c80910f9d60',
+        'cookie':'', # 换成自己的cookie哦~
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 UBrowser/6.2.4098.3 Safari/537.36',
     }
     
@@ -83,6 +83,7 @@ def roopLink(urls):
         download(url, traceId, title)
 
 if __name__ == '__main__':
+    # 输入小红书的链接
     links = ['https://www.xiaohongshu.com/explore/63f07247000000001300d67b','https://www.xiaohongshu.com/explore/60a5f16f0000000021034cb4']
     roopLink(links)
     print("Finished!🎉")
