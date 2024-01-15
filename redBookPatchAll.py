@@ -52,13 +52,18 @@ def parsing_link(html):
     video = ''
     videoId = ''
     imageList = []
-    if 'video' in result['note']['note'] :
-        video = result['note']['note']['video']['media']['stream']['h264'][0]['masterUrl']
-        videoId = result['note']['note']['video']['media']['videoId']
+
+    noteDetailMap = result['note']['noteDetailMap']
+    # 获取第一个键
+    first_key = next(iter(noteDetailMap))
+    first_value = noteDetailMap[first_key]
+    if 'video' in first_value['note'] :
+        video = first_value['note']['video']['media']['stream']['h264'][0]['masterUrl']
+        videoId = first_value['note']['video']['media']['videoId']
     else:
-        imageList = result['note']['note']['imageList']
+        imageList = first_value['note']['imageList']
     
-    title = result['note']['note']['title']
+    title = first_value['note']['title']
     print('标题：', title)
     print('开始下载啦！🚀')
 
@@ -70,9 +75,9 @@ def parsing_link(html):
     if video:
         downloadVideo(video, videoId, title)
     # 提取图片
-    for i in imageList:
-        picUrl = f"https://sns-img-qc.xhscdn.com/{i['traceId']}"
-        yield picUrl, i['traceId'], title
+    for index, i in enumerate(imageList):
+        picUrl = i['urlDefault']
+        yield picUrl, index, title
 
 def download(url, filename, folder):
     '''
@@ -127,31 +132,42 @@ if __name__ == '__main__':
 
     desired_capabilities = DesiredCapabilities.CHROME
     desired_capabilities["pageLoadStrategy"] = "none"
+
+    # 指定 chromedriver 的路径
+    chromedriver_path = '/Users/hongdazhu/chromedriver/120/chromedriver'
+
     # 创建Chrome浏览器对象
-    browser = webdriver.Chrome(options = option)
+    browser = webdriver.Chrome(executable_path=chromedriver_path,options = option)
     # version = browser.capabilities['browserVersion']
     # print(version, 'versionversion')
 
     # 小红书主页的地址
-    browser.get('https://www.xiaohongshu.com/user/profile/5c014959f7e8b935bc3cec68?appuid=5a2025504eacab20fa287e82&apptime=1679472390')
+    urls = [
+        'https://www.xiaohongshu.com/user/profile/5f2e6cb800000000010063e2?m_source=pinpai',
+        # 可以添加更多的链接
+        # 'https://www.xiaohongshu.com/user/profile/另一个用户的ID',
+    ]
 
-    # 设置隐式等待时间为10秒
-    time.sleep(3)
-    browser.refresh()
-    time.sleep(5)
-   
-    pages = browser.page_source
-    soup = BeautifulSoup(pages, 'html.parser')
+    for url in urls:
+        browser.get(url)
 
-    postId = []
-    hrefArr = []
-
-    for span in soup.find_all('a', class_='cover ld'):
-        # titles.append(span.find('h2').text)
-        postId.append('https://www.xiaohongshu.com/explore/'+span.get('href').split('/')[4])
+        # 设置隐式等待时间为10秒
+        time.sleep(3)
+        browser.refresh()
+        time.sleep(5)
     
-    # print(soup, 'noteItem')
-    print(postId)
+        pages = browser.page_source
+        soup = BeautifulSoup(pages, 'html.parser')
 
-    roopLink(postId)
+        postId = []
+        hrefArr = []
+
+        for span in soup.find_all('a', class_='cover ld mask'):
+            # titles.append(span.find('h2').text)
+            postId.append('https://www.xiaohongshu.com/explore/'+span.get('href').split('/')[4])
+        
+        # print(soup, 'noteItem')
+        print(postId)
+
+        roopLink(postId)
     print("Finished!🎉")
